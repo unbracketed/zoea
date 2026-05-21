@@ -1,0 +1,23 @@
+# Child repos — cloned by scripts/install.sh, tracked in their own remotes
+/zoea-server/
+/zoea-web-ui/
+/zoea-tools/
+/zoea-core/
+/zoea-deploy/
+/gateway-tui-client/
+
+# Personal / workspace state
+/_notes/
+/.zoea/
+/.claude/
+/.obsidian/
+
+# Local process-compose config (the .example is tracked)
+/process-compose.yaml
+/process-compose.override.yaml
+
+# Misc
+.DS_Store
+*.log
+node_modules/
+package-lock.json

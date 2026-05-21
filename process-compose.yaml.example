@@ -1,0 +1,68 @@
+version: "0.5"
+
+shell:
+  shell_command: "bash"
+  shell_argument: "-lc"
+
+processes:
+  zoea-server-a:
+    working_dir: ./zoea-server
+    command: "go run ./cmd/server"
+    environment:
+      - "ZOEA_LISTEN_ADDR=14004"
+      - "ZOEA_STORE_DSN=./.runtime/a/zoea.db"
+      - "ZOEA_PI_SESSION_DIR=./.runtime/a/sessions"
+      - "ZOEA_WORKING_DIR=.."
+    availability:
+      restart: "on_failure"
+      backoff_seconds: 2
+    readiness_probe:
+      exec:
+        command: "curl -fsS http://127.0.0.1:14004/healthz >/dev/null"
+      initial_delay_seconds: 3
+      period_seconds: 3
+      timeout_seconds: 2
+      success_threshold: 1
+      failure_threshold: 10
+
+  zoea-server-b:
+    working_dir: ./zoea-server
+    command: "go run ./cmd/server"
+    environment:
+      - "ZOEA_LISTEN_ADDR=14014"
+      - "ZOEA_STORE_DSN=./.runtime/b/zoea.db"
+      - "ZOEA_PI_SESSION_DIR=./.runtime/b/sessions"
+      - "ZOEA_WORKING_DIR=.."
+    availability:
+      restart: "on_failure"
+      backoff_seconds: 2
+    readiness_probe:
+      exec:
+        command: "curl -fsS http://127.0.0.1:14014/healthz >/dev/null"
+      initial_delay_seconds: 3
+      period_seconds: 3
+      timeout_seconds: 2
+      success_threshold: 1
+      failure_threshold: 10
+
+  zoea-web-ui:
+    working_dir: ./zoea-web-ui
+    command: "npm run dev -- --host 127.0.0.1 --port 14314"
+    environment:
+      - "VITE_ZOEA_DEV_PROXY_TARGET=http://127.0.0.1:14300"
+      - "VITE_ZOEA_USER_ID=web-user"
+      - "VITE_ZOEA_PROJECT_ID="
+    depends_on:
+      zoea-server-a:
+        condition: process_healthy
+    availability:
+      restart: "on_failure"
+      backoff_seconds: 2
+    readiness_probe:
+      exec:
+        command: "curl -fsS http://127.0.0.1:14314 >/dev/null"
+      initial_delay_seconds: 5
+      period_seconds: 3
+      timeout_seconds: 2
+      success_threshold: 1
+      failure_threshold: 10
