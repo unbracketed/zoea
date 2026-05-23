@@ -1,6 +1,6 @@
 # Zoea Collaboration Toolkit
 
-A custom agent harness built on Pi with goals of providing a light framework for building virtual assistants, agentic workflows, and domain-specific automations.
+A custom agent harness built on Pi with goals of providing a light framework for building virtual assistants, agentic workflows, and domain-specific automations. 
 
 **zoea-server**: HTTP/WebSocket server that bridges clients to `pi --mode rpc` agent subprocesses. Create sessions, send prompts, stream events — all over a REST API.
 
@@ -11,6 +11,8 @@ A custom agent harness built on Pi with goals of providing a light framework for
 **zoea-core**: Common Python interfaces and utilities for Zoea tools, starting with consistent result/artifact output under `.zoea/output`.
 
 **gateway-tui-client**: A terminal UI client for [zoea-server](../zoea-server). Connect to a running server instance, create or load sessions, send messages, and stream responses in real-time.
+
+The Web UI can connect to either local or remote Zoea servers and switch between multiple connections. 
 
 ## Getting Started
 
